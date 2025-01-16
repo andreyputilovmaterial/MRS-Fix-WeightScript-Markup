@@ -1,0 +1,32 @@
+
+
+sub FixWeightReportMarkup(fname)
+    ' 1. allocate
+    dim oFile, contents
+
+    ' 2. read
+    set oFile = CreateObject("Scripting.FileSystemObject").OpenTextFile(fname,1)
+    contents = oFile.ReadAll()
+    oFile.Close()
+
+    ' 3. prepare replacements
+    dim HTMLTag_RegEx, HTMLTag_RegEx_Matches
+	set HTMLTag_RegEx = CreateObject("VBScript.RegExp")
+	HTMLTag_RegEx.Pattern = "(<\s*?/?\s*?)((?:html|body|head))"
+	HTMLTag_RegEx.IgnoreCase = True
+	HTMLTag_RegEx.Global = True
+    contents = HTMLTag_RegEx.Replace(contents,"$1SECTION$2")
+    contents = "<html><body style=""background: #6699cc;"">" + contents + "</body></html>"
+
+    ' 4. write back
+    set oFile = CreateObject("Scripting.FileSystemObject").OpenTextFile(fname,2,true)
+    oFile.Write(contents)
+    oFile.Close()
+
+    ' done!
+
+end sub
+
+
+
+
